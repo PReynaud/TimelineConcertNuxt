@@ -13,23 +13,34 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import Component from 'vue-class-component';
-import { Prop } from 'vue-property-decorator';
+import { defineComponent, toRefs, computed } from '@nuxtjs/composition-api';
 import Show from '@/models/Show.model';
 import { mdiMapMarker } from '@mdi/js';
 
-@Component({})
-export default class TimelineCard extends Vue {
-  icons = {
-    mdiMapMarker
-  };
-
-  @Prop({ type: Show, required: true })
-  item!: Show;
-
-  get displayPlace(): string | null {
-    return this.item.place?.display || null;
-  }
+interface TimelineCardProps {
+  item: Show;
 }
+
+export default defineComponent({
+  props: {
+    item: {
+      type: Show,
+      required: true
+    }
+  },
+  setup(props: TimelineCardProps) {
+    const { item } = toRefs(props);
+
+    const icons = {
+      mdiMapMarker
+    };
+
+    const displayPlace = computed(() => item.value.place?.display || null);
+
+    return {
+      displayPlace,
+      icons
+    };
+  }
+});
 </script>

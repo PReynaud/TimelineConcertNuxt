@@ -11,29 +11,29 @@
     "lint": "yarn lint:js"
   },
   "dependencies": {
-    "@nuxt/content": "^1.14.0",
     "@nuxtjs/axios": "^5.13.6",
-    "@nuxtjs/pwa": "^3.3.5",
+    "@nuxtjs/composition-api": "^0.30.0",
+    "@pinia/nuxt": "^0.1.5",
     "core-js": "^3.15.1",
     "date-fns": "^2.22.1",
     "lodash": "^4.17.21",
     "nuxt": "^2.15.7",
+    "pinia": "^2.0.4",
     "vuetify": "^2.5.5"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.14.7",
+    "@mdi/js": "^6.5.95",
     "@nuxt/types": "^2.15.7",
     "@nuxt/typescript-build": "^2.1.0",
     "@nuxtjs/eslint-config-typescript": "^6.0.1",
     "@nuxtjs/eslint-module": "^3.0.2",
     "@nuxtjs/vuetify": "^1.12.1",
+    "@types/lodash": "^4.14.177",
     "eslint": "^7.29.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-nuxt": "^2.0.0",
     "eslint-plugin-vue": "^7.12.1",
-    "prettier": "^2.3.2",
-    "vue-class-component": "^7.2.6",
-    "vue-property-decorator": "^9.1.2",
-    "vuex-class": "^0.3.2"
+    "prettier": "^2.3.2"
   }
 }

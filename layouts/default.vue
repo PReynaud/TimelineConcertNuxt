@@ -5,7 +5,7 @@
     <AppBar />
 
     <v-main>
-      <v-container>
+      <v-container fill-height fluid>
         <Nuxt />
       </v-container>
     </v-main>
@@ -13,11 +13,11 @@
 </template>
 
 <script>
-import AppBar from '@/components/AppBar.vue'
+import AppBar from '@/components/AppBar.vue';
 
 export default {
   components: {
     AppBar
   }
-}
+};
 </script>
