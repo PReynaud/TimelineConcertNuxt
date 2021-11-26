@@ -21,6 +21,13 @@ export const useTimelineStore = defineStore('timeline', {
         this.shows = results.map((result) => Show.fromJson(result));
       }, 500);
       this.isLoading = false;
+    },
+
+    updateItem(itemId: string, newValues: Show) {
+      const indexToUpdate = this.shows.findIndex((item) => item.id === itemId);
+      if (indexToUpdate) {
+        this.shows[indexToUpdate] = newValues;
+      }
     }
   }
 });
