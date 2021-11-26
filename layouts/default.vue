@@ -1,7 +1,5 @@
 <template>
   <v-app dark>
-    <!-- <NavigationDrawer /> -->
-
     <AppBar />
 
     <v-main>
@@ -12,7 +10,7 @@
   </v-app>
 </template>
 
-<script>
+<script lang="ts">
 import AppBar from '@/components/AppBar.vue';
 
 export default {

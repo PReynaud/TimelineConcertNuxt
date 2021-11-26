@@ -26,8 +26,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, onMounted } from 'vue-demi';
-import { groupBy, sortBy } from 'lodash';
+import { defineComponent, computed, onMounted, watchEffect } from 'vue-demi';
+import { groupBy, orderBy } from 'lodash';
 import TimelineCard from './TimelineCard.vue';
 import LoadingContainer from './LoadingContainer.vue';
 import Show from '~/models/Show.model';
@@ -40,7 +40,14 @@ export default defineComponent({
     const timelineStore = useTimelineStore();
     const showList = computed(() => timelineStore.shows);
     const isLoading = computed(() => timelineStore.isLoading);
-    const sortedShowList = computed(() => sortBy(showList.value, 'date'));
+    const sortedShowList = computed(() =>
+      orderBy(showList.value, ['date'], ['desc'])
+    );
+
+    watchEffect(() => {
+      console.log(sortedShowList);
+    });
+
     const groupByShowList = computed(() => {
       return groupBy(sortedShowList.value, (show: Show) => getYear(show.date));
     });
