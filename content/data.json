@@ -7,6 +7,7 @@
         "name": "Alcest"
       },
       "place": {
+        "id": "1",
         "name": "Ninkasi KAO",
         "address": null,
         "zipCode": null,
@@ -28,6 +29,7 @@
         "name": "Woodkid"
       },
       "place": {
+        "id": "2",
         "name": "Théâtre antique de Fourvière",
         "address": null,
         "zipCode": null,
@@ -42,6 +44,7 @@
         "name": "Mogwai"
       },
       "place": {
+        "id": "2",
         "name": "Théâtre antique de Fourvière",
         "address": null,
         "zipCode": null,

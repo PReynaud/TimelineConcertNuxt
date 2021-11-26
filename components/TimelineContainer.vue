@@ -1,33 +1,38 @@
 <template>
   <LoadingContainer v-if="isLoading" />
 
-  <v-container v-else>
-    <v-timeline>
-      <template v-for="(showsByYear, propertyName) in groupByShowList">
-        <v-timeline-item :key="`${propertyName}`" left hide-dot>
+  <v-container v-else fluid>
+    <v-timeline v-if="showList.length > 0">
+      <div v-for="[year, showsByYear] in showList" :key="`${year}`">
+        <v-timeline-item left hide-dot>
           <div class="float-right">
-            <h2>{{ propertyName }}</h2>
+            <h2>{{ year }}</h2>
           </div>
         </v-timeline-item>
 
         <v-slide-x-transition
           v-for="uniqueShow in showsByYear"
-          :key="`${propertyName}-${uniqueShow.id}`"
+          :key="`${year}-${uniqueShow.id}`"
           group
         >
-          <v-timeline-item :key="`${propertyName}-${uniqueShow.id}`" right>
+          <v-timeline-item :key="`${year}-${uniqueShow.id}`" right>
             <template #opposite>{{ formatDate(uniqueShow.date) }}</template>
             <TimelineCard :item="uniqueShow" />
           </v-timeline-item>
         </v-slide-x-transition>
-      </template>
+      </div>
     </v-timeline>
+
+    <div v-else class="d-flex align-center justify-center">
+      Pas de données disponibles
+    </div>
   </v-container>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, onMounted, watchEffect } from 'vue-demi';
-import { groupBy, orderBy } from 'lodash';
+import { defineComponent, computed, onMounted } from 'vue-demi';
+import { flow, orderBy, groupBy, toPairs, reverse } from 'lodash/fp';
+import { storeToRefs } from 'pinia';
 import TimelineCard from './TimelineCard.vue';
 import LoadingContainer from './LoadingContainer.vue';
 import Show from '~/models/Show.model';
@@ -38,19 +43,16 @@ export default defineComponent({
   components: { TimelineCard, LoadingContainer },
   setup() {
     const timelineStore = useTimelineStore();
-    const showList = computed(() => timelineStore.shows);
-    const isLoading = computed(() => timelineStore.isLoading);
-    const sortedShowList = computed(() =>
-      orderBy(showList.value, ['date'], ['desc'])
+    const { filteredShows, isLoading } = storeToRefs(timelineStore);
+
+    const cleanedShowList = computed(() =>
+      flow(
+        orderBy(['date'], ['desc']),
+        groupBy((show: Show) => getYear(show.date)),
+        toPairs,
+        reverse
+      )(filteredShows.value)
     );
-
-    watchEffect(() => {
-      console.log(sortedShowList);
-    });
-
-    const groupByShowList = computed(() => {
-      return groupBy(sortedShowList.value, (show: Show) => getYear(show.date));
-    });
 
     onMounted(async () => {
       await timelineStore.fetchShows();
@@ -58,7 +60,7 @@ export default defineComponent({
 
     return {
       isLoading,
-      groupByShowList,
+      showList: cleanedShowList,
       formatDate
     };
   }

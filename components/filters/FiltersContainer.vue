@@ -1,27 +1,53 @@
 <template>
   <v-sheet rounded="lg">
-    <v-list color="transparent">
-      <v-list-item v-for="n in 5" :key="n" link>
-        <v-list-item-content>
-          <v-list-item-title> List Item {{ n }} </v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
+    <v-container>
+      <v-row>
+        <v-col>
+          <v-text-field
+            v-model="searchText"
+            :append-icon="'mdi-search'"
+            label="Mots clés"
+          />
+        </v-col>
+      </v-row>
 
-      <v-divider class="my-2"></v-divider>
+      <v-row>
+        <v-col>
+          <v-select v-model="selectedPlaceId" :items="[]" label="Emplacement" />
+        </v-col>
+      </v-row>
 
-      <v-list-item link color="grey lighten-4">
-        <v-list-item-content>
-          <v-list-item-title> Refresh </v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-    </v-list>
+      <v-row>
+        <v-col>
+          <v-btn color="info" class="float-end" @click="launchSearch"
+            >Rechercher</v-btn
+          >
+        </v-col>
+      </v-row>
+    </v-container>
   </v-sheet>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue-demi';
+import { defineComponent, Ref, ref } from 'vue-demi';
+import { useTimelineStore } from '~/store/timeline';
 
 export default defineComponent({
-  setup() {}
+  setup() {
+    const timelineStore = useTimelineStore();
+
+    const searchText = ref('');
+    const selectedPlaceId: Ref<string | null> = ref(null);
+
+    const launchSearch = () => {
+      timelineStore.setSearchText(searchText.value);
+    };
+
+    return {
+      searchText,
+      selectedPlaceId,
+      launchSearch
+    };
+  }
 });
 </script>

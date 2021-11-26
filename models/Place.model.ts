@@ -1,5 +1,6 @@
 export default class Place {
   constructor(
+    public id: string,
     public name: string,
     public address?: string,
     public zipCode?: string,
@@ -9,6 +10,7 @@ export default class Place {
 
   static fromJson(fromApiEntity: any): Place {
     return new Place(
+      fromApiEntity.id,
       fromApiEntity.name,
       fromApiEntity.address,
       fromApiEntity.zipCode,

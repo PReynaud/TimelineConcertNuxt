@@ -3,7 +3,7 @@
     <AppBar />
 
     <v-main>
-      <v-container fill-height fluid>
+      <v-container fill-height fluid class="align-start">
         <Nuxt />
       </v-container>
     </v-main>
