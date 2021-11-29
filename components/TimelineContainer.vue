@@ -32,7 +32,6 @@
 <script lang="ts">
 import { defineComponent, computed, onMounted } from 'vue-demi';
 import { flow, orderBy, groupBy, toPairs, reverse } from 'lodash/fp';
-import { storeToRefs } from 'pinia';
 import TimelineCard from './TimelineCard.vue';
 import LoadingContainer from './LoadingContainer.vue';
 import Show from '~/models/Show.model';
@@ -43,8 +42,8 @@ export default defineComponent({
   components: { TimelineCard, LoadingContainer },
   setup() {
     const timelineStore = useTimelineStore();
-    const { filteredShows, isLoading } = storeToRefs(timelineStore);
-
+    const filteredShows = computed(() => timelineStore.filteredShows);
+    const isLoading = computed(() => timelineStore.isLoading);
     const cleanedShowList = computed(() =>
       flow(
         orderBy(['date'], ['desc']),

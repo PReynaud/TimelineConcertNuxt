@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { flow, map, uniq, filter } from 'lodash/fp';
 import ShowsData from '~/content/data.json';
 import Show from '~/models/Show.model';
 
@@ -6,25 +7,44 @@ interface TimelineState {
   shows: Show[];
   isLoading: boolean;
   searchText: string;
+  selectedLocationId: string;
 }
 
 export const useTimelineStore = defineStore('timeline', {
   state: (): TimelineState => ({
     shows: [],
     isLoading: false,
-    searchText: ''
+    searchText: '',
+    selectedLocationId: ''
   }),
 
   getters: {
     filteredShows: (state) => {
+      let result = state.shows;
+
       if (state.searchText) {
-        return state.shows.filter((show) =>
+        result = result.filter((show) =>
           show.band.name
             .toLowerCase()
             .includes(state.searchText.trim().toLowerCase())
         );
       }
-      return state.shows;
+      if (state.selectedLocationId) {
+        result = result.filter(
+          (show) => show.place?.id === state.selectedLocationId
+        );
+      }
+
+      return result;
+    },
+
+    allAvailablePlaces: (state): string[] => {
+      return flow(
+        filter((show) => show !== undefined && show !== null),
+        map((show: Show) => ({ name: show.place?.name, id: show.place?.id })),
+        filter((place) => place.id !== undefined && place.id !== null),
+        uniq
+      )(state.shows);
     }
   },
 
@@ -34,12 +54,13 @@ export const useTimelineStore = defineStore('timeline', {
       this.isLoading = true;
       await setTimeout(() => {
         this.shows = results.map((result) => Show.fromJson(result));
-      }, 500);
-      this.isLoading = false;
+        this.isLoading = false;
+      }, 2000);
     },
 
-    setSearchText(searchText: string) {
-      this.searchText = searchText;
+    search(searchText: string | null, selectedLocationId: string | null) {
+      this.searchText = searchText ?? '';
+      this.selectedLocationId = selectedLocationId ?? '';
     }
   }
 });
